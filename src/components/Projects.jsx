@@ -9,19 +9,19 @@ const ProjectCard = ({ project, index }) => {
   return (
     <FadeIn delay={index * 0.2}>
       <div className="glass-panel project-card" style={{ display: 'grid', gridTemplateColumns: 'repeat(auto-fit, minmax(350px, 1fr))', gap: '3rem', padding: '3rem', overflow: 'hidden' }}>
-        
+
         {/* Left Side: Image with Hover Overlay */}
         <div className="project-img-wrapper" style={{ position: 'relative', borderRadius: '1rem', overflow: 'hidden', backgroundColor: 'var(--bg-tertiary)', aspectRatio: '16/10', alignSelf: 'start' }}>
-          <img 
-            src={project.image} 
-            alt={project.title} 
+          <img
+            src={project.image}
+            alt={project.title}
             className="project-img"
             style={{ width: '100%', height: '100%', objectFit: 'cover', display: 'block', transition: 'transform 0.5s ease' }}
-            onError={(e) => { 
+            onError={(e) => {
               if (!e.target.src.endsWith('.JPG')) {
                 e.target.src = project.image + '.JPG';
               } else {
-                e.target.style.display = 'none'; 
+                e.target.style.display = 'none';
                 e.target.nextSibling.style.display = 'flex';
               }
             }}
@@ -56,7 +56,7 @@ const ProjectCard = ({ project, index }) => {
         {/* Right Side: Details */}
         <div style={{ display: 'flex', flexDirection: 'column' }}>
           <h3 style={{ fontSize: '2rem', marginBottom: '1rem', color: '#fff' }}>{project.title}</h3>
-          
+
           {/* Tech Stack */}
           <div style={{ display: 'flex', flexWrap: 'wrap', gap: '0.5rem', marginBottom: '1.5rem' }}>
             {project.tech.map((tech, i) => (
@@ -71,15 +71,15 @@ const ProjectCard = ({ project, index }) => {
           </p>
 
           {/* Toggle Button */}
-          <button 
+          <button
             onClick={() => setIsExpanded(!isExpanded)}
-            style={{ 
-              display: 'flex', 
-              alignItems: 'center', 
-              gap: '0.5rem', 
-              background: 'transparent', 
-              border: 'none', 
-              color: '#10b981', 
+            style={{
+              display: 'flex',
+              alignItems: 'center',
+              gap: '0.5rem',
+              background: 'transparent',
+              border: 'none',
+              color: '#10b981',
               cursor: 'pointer',
               fontSize: '1rem',
               fontWeight: '500',
@@ -88,7 +88,7 @@ const ProjectCard = ({ project, index }) => {
               width: 'fit-content'
             }}
           >
-            {isExpanded ? 'Show Less' : 'View Full Details'} 
+            {isExpanded ? 'Show Less' : 'View Full Details'}
             <motion.div animate={{ rotate: isExpanded ? 180 : 0 }} transition={{ type: 'spring', stiffness: 200, damping: 15 }}>
               <ChevronDown size={20} />
             </motion.div>
@@ -96,7 +96,7 @@ const ProjectCard = ({ project, index }) => {
 
           <AnimatePresence>
             {isExpanded && (
-              <motion.div 
+              <motion.div
                 initial={{ height: 0, opacity: 0 }}
                 animate={{ height: 'auto', opacity: 1 }}
                 exit={{ height: 0, opacity: 0 }}
@@ -159,25 +159,10 @@ const Projects = () => {
       ],
       challenges: 'Handling the asynchronous nature of AI model inference while keeping the UI responsive and providing real-time feedback to the user.',
       tech: ['React', 'Tailwind CSS', 'OpenAI API', 'Node.js'],
+      liveLink: 'https://ai-cloth-design.vercel.app/',
       link: '#',
       github: 'https://github.com/Awaisbutt2007/Ai-Cloth-Design.git',
       image: '/ai-cloth.jpg.png'
-    },
-    {
-      title: 'Analog Clock',
-      description: 'A beautifully crafted, real-time analog clock interface built purely with frontend web technologies.',
-      problemSolved: 'Providing a highly customizable, lightweight time-keeping widget that can be easily integrated into digital dashboards.',
-      features: [
-        'Real-time smooth hand animation (hours, minutes, seconds)',
-        'Dark and Light theme support',
-        'Responsive SVG-based design',
-        'Accurate synchronization with local system time'
-      ],
-      challenges: 'Calculating the exact rotation degrees using trigonometric logic and ensuring CSS animations remain smooth without high CPU usage.',
-      tech: ['HTML5', 'CSS3', 'JavaScript'],
-      link: '#',
-      github: 'https://github.com/Awaisbutt2007/Analog-Clock.git',
-      image: '/clock.jpg.png'
     }
   ];
 
