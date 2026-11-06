@@ -1,14 +1,18 @@
 import React, { useState } from 'react';
-import { ArrowLeft, Send } from 'lucide-react';
-import FadeIn from '../components/FadeIn';
-import { Link } from 'react-router-dom';
+import { Send, Mail, Code2 as GithubIcon, MapPin, Clock, CheckCircle2, AlertCircle } from 'lucide-react';
+import { motion, AnimatePresence } from 'framer-motion';
 import emailjs from '@emailjs/browser';
+import FadeIn from '../components/FadeIn';
+import PageHeader from '../components/PageHeader';
+
+const CONTACT_EMAIL = 'buttawais2000@gmail.com';
+const PROJECT_TYPES = ['SaaS / Web app', 'Desktop software', '3D / animated website', 'API & automation', 'Something else'];
 
 const ContactForm = () => {
-  const CONTACT_EMAIL = 'buttawais2000@gmail.com';
   const [name, setName] = useState('');
   const [email, setEmail] = useState('');
   const [message, setMessage] = useState('');
+  const [type, setType] = useState(PROJECT_TYPES[0]);
   const [sending, setSending] = useState(false);
   const [status, setStatus] = useState(null);
 
@@ -21,131 +25,178 @@ const ContactForm = () => {
     const trimmedName = name.trim();
     const trimmedEmail = email.trim();
     const trimmedMessage = message.trim();
-    const emailPattern = /^[^\s@]+@[^\s@]+\.[^\s@]+$/;
 
     if (!trimmedName || !trimmedEmail || !trimmedMessage) {
       setStatus({ ok: false, text: 'Please fill in all fields before sending.' });
       return;
     }
-
-    if (!emailPattern.test(trimmedEmail)) {
+    if (!/^[^\s@]+@[^\s@]+\.[^\s@]+$/.test(trimmedEmail)) {
       setStatus({ ok: false, text: 'Please enter a valid email address.' });
       return;
     }
-    setSending(true);
-    setStatus(null);
-
     if (!SERVICE_ID || !TEMPLATE_ID || !PUBLIC_KEY) {
-      setSending(false);
-      setStatus({ ok: false, text: 'Email service configuration is missing. Restart the dev server.' });
+      setStatus({ ok: false, text: `The form is not available right now. Please email me directly at ${CONTACT_EMAIL}.` });
       return;
     }
 
+    setSending(true);
+    setStatus(null);
+    const fullMessage = `Project type: ${type}\n\n${trimmedMessage}`;
+
     try {
-      await emailjs.send(SERVICE_ID, TEMPLATE_ID, {
-        to_email: CONTACT_EMAIL,
-        to_name: 'Awais',
-        subject: `Portfolio contact from ${trimmedName}`,
-        from_name: trimmedName,
-        from_email: trimmedEmail,
-        user_name: trimmedName,
-        user_email: trimmedEmail,
-        name: trimmedName,
-        email: trimmedEmail,
-        reply_to: trimmedEmail,
-        message: trimmedMessage,
-        content: trimmedMessage,
-      }, { publicKey: PUBLIC_KEY });
-      setStatus({ ok: true, text: 'Message sent successfully.' });
-      setName(''); setEmail(''); setMessage('');
+      await emailjs.send(
+        SERVICE_ID,
+        TEMPLATE_ID,
+        {
+          to_email: CONTACT_EMAIL,
+          to_name: 'Awais',
+          subject: `Portfolio contact from ${trimmedName} (${type})`,
+          from_name: trimmedName,
+          from_email: trimmedEmail,
+          user_name: trimmedName,
+          user_email: trimmedEmail,
+          name: trimmedName,
+          email: trimmedEmail,
+          reply_to: trimmedEmail,
+          project_type: type,
+          message: fullMessage,
+          content: fullMessage,
+        },
+        { publicKey: PUBLIC_KEY },
+      );
+      setStatus({ ok: true, text: 'Message sent! I’ll get back to you soon.' });
+      setName('');
+      setEmail('');
+      setMessage('');
     } catch (error) {
       console.error('EmailJS send failed:', error);
-      const errorText = error?.text || error?.message || 'EmailJS rejected the request.';
-      setStatus({ ok: false, text: `EmailJS error: ${errorText}` });
+      setStatus({ ok: false, text: `Couldn’t send the message. Please email me directly at ${CONTACT_EMAIL}.` });
     } finally {
       setSending(false);
     }
   };
 
   return (
-    <form style={{ display: 'flex', flexDirection: 'column', gap: '1rem' }} onSubmit={handleSubmit}>
-      <div>
-        <label style={{ display: 'block', marginBottom: '0.4rem', color: 'var(--text-secondary)', fontSize: '0.9rem' }}>Name</label>
-        <input value={name} onChange={(e) => setName(e.target.value)} placeholder="John Doe" style={{ width: '100%', padding: '0.9rem', background: 'var(--bg-primary)', border: '1px solid var(--border-color)', borderRadius: '8px', color: '#fff', fontSize: '1rem', outline: 'none' }} />
-      </div>
-      <div>
-        <label style={{ display: 'block', marginBottom: '0.4rem', color: 'var(--text-secondary)', fontSize: '0.9rem' }}>Email</label>
-        <input value={email} onChange={(e) => setEmail(e.target.value)} type="email" placeholder="john@example.com" style={{ width: '100%', padding: '0.9rem', background: 'var(--bg-primary)', border: '1px solid var(--border-color)', borderRadius: '8px', color: '#fff', fontSize: '1rem', outline: 'none' }} />
-      </div>
-      <div>
-        <label style={{ display: 'block', marginBottom: '0.4rem', color: 'var(--text-secondary)', fontSize: '0.9rem' }}>Message</label>
-        <textarea value={message} onChange={(e) => setMessage(e.target.value)} placeholder="Your message..." rows={6} style={{ width: '100%', padding: '0.9rem', background: 'var(--bg-primary)', border: '1px solid var(--border-color)', borderRadius: '8px', color: '#fff', fontSize: '1rem', outline: 'none', resize: 'vertical' }} />
-      </div>
-
-      <div style={{ display: 'flex', gap: '0.75rem', alignItems: 'center' }}>
-        <button disabled={sending} type="submit" className="btn-primary" style={{ flex: 1, padding: '0.9rem 1rem', display: 'inline-flex', alignItems: 'center', justifyContent: 'center', gap: '0.5rem' }}>
-          {sending ? 'Sending...' : 'Send Message'} <Send size={16} />
-        </button>
-      </div>
-
-      {status && (
-        <div
-          role="status"
-          aria-live="polite"
-          style={{
-            position: 'fixed',
-            right: '1.5rem',
-            bottom: '1.5rem',
-            zIndex: 10000,
-            maxWidth: 'min(360px, calc(100vw - 3rem))',
-            padding: '0.9rem 1.1rem',
-            border: `1px solid ${status.ok ? 'rgba(16,185,129,0.5)' : 'rgba(248,113,113,0.5)'}`,
-            borderRadius: '8px',
-            background: 'var(--bg-secondary)',
-            color: status.ok ? '#6ee7b7' : '#fca5a5',
-            boxShadow: '0 12px 30px rgba(0,0,0,0.4)',
-            fontSize: '0.9rem'
-          }}
-        >
-          {status.text}
+    <form className="cform" onSubmit={handleSubmit} noValidate>
+      <div className="cform-field">
+        <span className="cform-label">What are you looking for?</span>
+        <div className="cform-chips" role="radiogroup" aria-label="Project type">
+          {PROJECT_TYPES.map((t) => (
+            <button
+              type="button"
+              key={t}
+              role="radio"
+              aria-checked={type === t}
+              className={type === t ? 'active' : ''}
+              onClick={() => setType(t)}
+            >
+              {t}
+            </button>
+          ))}
         </div>
-      )}
+      </div>
 
+      <div className="cform-row">
+        <label className="cform-field">
+          <span className="cform-label">Your name</span>
+          <input value={name} onChange={(e) => setName(e.target.value)} placeholder="Ali Khan" autoComplete="name" />
+        </label>
+        <label className="cform-field">
+          <span className="cform-label">Email</span>
+          <input value={email} onChange={(e) => setEmail(e.target.value)} type="email" placeholder="you@example.com" autoComplete="email" />
+        </label>
+      </div>
+
+      <label className="cform-field">
+        <span className="cform-label">Tell me about your project</span>
+        <textarea
+          value={message}
+          onChange={(e) => setMessage(e.target.value)}
+          placeholder="What does your business do, what should the software solve, and when do you need it?"
+          rows={6}
+        />
+      </label>
+
+      <button disabled={sending} type="submit" className="btn-gradient cform-submit">
+        {sending ? 'Sending…' : 'Send message'} <Send size={16} />
+      </button>
+
+      <AnimatePresence>
+        {status && (
+          <motion.div
+            role="status"
+            aria-live="polite"
+            className={`cform-status ${status.ok ? 'ok' : 'err'}`}
+            initial={{ opacity: 0, y: -6 }}
+            animate={{ opacity: 1, y: 0 }}
+            exit={{ opacity: 0 }}
+          >
+            {status.ok ? <CheckCircle2 size={18} /> : <AlertCircle size={18} />}
+            <span>{status.text}</span>
+          </motion.div>
+        )}
+      </AnimatePresence>
     </form>
   );
 };
 
-const Contact = () => {
-  return (
-    <div className="app-wrapper" style={{ minHeight: '100vh', display: 'flex', flexDirection: 'column' }}>
-      <header className="nav-header">
-        <div className="container nav-container">
-          <Link to="/" className="logo" style={{ display: 'flex', alignItems: 'center', gap: '0.5rem' }}>
-            <ArrowLeft size={20} /> Back to Home
-          </Link>
-        </div>
-      </header>
+const info = [
+  {
+    icon: Mail,
+    label: 'Email',
+    value: CONTACT_EMAIL,
+    href: `https://mail.google.com/mail/?view=cm&fs=1&to=${CONTACT_EMAIL}`,
+  },
+  { icon: GithubIcon, label: 'GitHub', value: 'github.com/Awaisbutt2007', href: 'https://github.com/Awaisbutt2007' },
+  { icon: MapPin, label: 'Location', value: 'Pakistan · working remotely worldwide' },
+  { icon: Clock, label: 'Availability', value: 'Open to freelance & full-time work' },
+];
 
-      <main style={{ flex: 1, display: 'flex', alignItems: 'center', paddingTop: '8rem', paddingBottom: '4rem' }}>
-        <section className="container" style={{ width: '100%' }}>
-          <FadeIn>
-            <div style={{ textAlign: 'center', marginBottom: '4rem' }}>
-              <h1 style={{ fontSize: 'clamp(2.5rem, 5vw, 4rem)', marginBottom: '1rem', color: '#fff' }}>
-                Get in <span className="text-gradient">Touch.</span>
-              </h1>
-              <p style={{ color: 'var(--text-secondary)', fontSize: '1.125rem', maxWidth: '600px', margin: '0 auto' }}>
-                Have a project in mind? Send me a message and I will get back to you.
-              </p>
-            </div>
+const Contact = () => (
+  <>
+    <PageHeader
+      kicker="Contact"
+      title="Let’s build something."
+      subtitle="Have a project in mind? Tell me about it and I’ll get back to you with ideas and a plan."
+      crumbs={[{ label: 'Contact' }]}
+    />
 
-            <div className="glass-panel" style={{ maxWidth: '680px', margin: '0 auto', padding: 'clamp(1.5rem, 5vw, 2.5rem)' }}>
-              <ContactForm />
-            </div>
-          </FadeIn>
-        </section>
-      </main>
-    </div>
-  );
-};
+    <section className="contact-section">
+      <div className="container contact-grid" style={{ maxWidth: '1200px' }}>
+        <FadeIn direction="right">
+          <aside className="contact-info">
+            <h2>Get in touch</h2>
+            <p>Booking system, shop or clinic software, social automation or a 3D website: I build the whole thing, end to end.</p>
+            <ul>
+              {info.map(({ icon: Icon, label, value, href }) => (
+                <li key={label}>
+                  <span className="contact-icon">
+                    <Icon size={20} />
+                  </span>
+                  <div>
+                    <em>{label}</em>
+                    {href ? (
+                      <a href={href} target="_blank" rel="noreferrer">
+                        {value}
+                      </a>
+                    ) : (
+                      <strong>{value}</strong>
+                    )}
+                  </div>
+                </li>
+              ))}
+            </ul>
+          </aside>
+        </FadeIn>
+
+        <FadeIn direction="left" delay={0.1}>
+          <div className="contact-card">
+            <ContactForm />
+          </div>
+        </FadeIn>
+      </div>
+    </section>
+  </>
+);
 
 export default Contact;

@@ -128,3 +128,64 @@
 }
 .cta-card h2 { font-size: clamp(1.9rem, 4.5vw, 3rem); color: #fff; margin-bottom: 1rem; }
 .cta-card p { color: #a3a3a3; font-size: 1.1rem; max-width: 600px; margin: 0 auto 2rem; line-height: 1.7; }
+
+/* ================================================================== */
+/*  Contact                                                            */
+/* ================================================================== */
+.nav-cta-active { box-shadow: 0 0 0 2px rgba(255,255,255,0.25); }
+.contact-section { padding: 4rem 0 8rem; }
+.contact-grid { display: grid; grid-template-columns: 0.85fr 1.15fr; gap: 3rem; align-items: start; }
+.contact-info h2 { color: #fff; font-size: 1.8rem; margin-bottom: 0.75rem; }
+.contact-info > p { color: var(--text-secondary); line-height: 1.75; margin-bottom: 2rem; }
+.contact-info ul { list-style: none; display: flex; flex-direction: column; gap: 0.85rem; }
+.contact-info li {
+  display: flex; align-items: center; gap: 1rem; padding: 1rem 1.1rem; border-radius: 14px;
+  background: var(--bg-secondary); border: 1px solid var(--border-color); transition: border-color 0.3s, transform 0.25s;
+}
+.contact-info li:hover { border-color: rgba(59,130,246,0.35); transform: translateX(4px); }
+.contact-icon {
+  width: 44px; height: 44px; flex-shrink: 0; display: grid; place-items: center; border-radius: 12px; color: #fff;
+  background: linear-gradient(135deg, rgba(16,185,129,.25), rgba(59,130,246,.25)); border: 1px solid rgba(59,130,246,.3);
+}
+.contact-info em { display: block; font-style: normal; font-size: 0.72rem; text-transform: uppercase; letter-spacing: 0.15em; color: var(--text-muted); margin-bottom: 0.2rem; }
+.contact-info a, .contact-info strong { color: #fff; font-weight: 500; text-decoration: none; word-break: break-word; }
+.contact-info a:hover { color: #6ee7b7; }
+
+.contact-card {
+  padding: clamp(1.5rem, 4vw, 2.5rem); border-radius: 20px; position: relative; overflow: hidden;
+  border: 1px solid rgba(59,130,246,0.22);
+  background:
+    radial-gradient(60% 80% at 100% 0%, rgba(59,130,246,0.12), transparent 60%),
+    radial-gradient(50% 70% at 0% 100%, rgba(16,185,129,0.10), transparent 60%),
+    var(--bg-secondary);
+  box-shadow: 0 30px 60px rgba(0,0,0,0.45);
+}
+.cform { display: flex; flex-direction: column; gap: 1.4rem; }
+.cform-row { display: grid; grid-template-columns: 1fr 1fr; gap: 1rem; }
+.cform-field { display: flex; flex-direction: column; gap: 0.5rem; }
+.cform-label { font-size: 0.85rem; color: #d4d4d4; font-weight: 500; }
+.cform input, .cform textarea {
+  width: 100%; padding: 0.95rem 1rem; border-radius: 12px; font: inherit; font-size: 1rem; color: #fff;
+  background: rgba(0,0,0,0.5); border: 1px solid var(--border-color); outline: none; resize: vertical;
+  transition: border-color 0.2s, box-shadow 0.2s;
+}
+.cform input::placeholder, .cform textarea::placeholder { color: #5a5a5a; }
+.cform input:focus, .cform textarea:focus { border-color: rgba(16,185,129,0.6); box-shadow: 0 0 0 4px rgba(16,185,129,0.12); }
+.cform-chips { display: flex; flex-wrap: wrap; gap: 0.5rem; }
+.cform-chips button {
+  font: inherit; font-size: 0.85rem; padding: 0.5rem 0.95rem; border-radius: 999px; cursor: pointer;
+  color: var(--text-secondary); background: rgba(255,255,255,0.03); border: 1px solid var(--border-color); transition: all 0.2s;
+}
+.cform-chips button:hover { color: #fff; border-color: #444; }
+.cform-chips button.active { color: #fff; background: linear-gradient(45deg, rgba(16,185,129,.3), rgba(59,130,246,.3)); border-color: rgba(59,130,246,.5); }
+.cform-submit { padding: 0.95rem 1.5rem; font-size: 1rem; gap: 0.5rem; align-self: stretch; }
+.cform-submit:disabled { opacity: 0.6; cursor: wait; }
+.cform-status { display: flex; gap: 0.6rem; align-items: flex-start; padding: 0.9rem 1rem; border-radius: 12px; font-size: 0.92rem; line-height: 1.5; }
+.cform-status svg { flex-shrink: 0; margin-top: 0.1rem; }
+.cform-status.ok { color: #6ee7b7; background: rgba(16,185,129,0.08); border: 1px solid rgba(16,185,129,0.35); }
+.cform-status.err { color: #fca5a5; background: rgba(248,113,113,0.08); border: 1px solid rgba(248,113,113,0.35); }
+
+@media (max-width: 860px) {
+  .contact-grid { grid-template-columns: 1fr; }
+  .cform-row { grid-template-columns: 1fr; }
+}

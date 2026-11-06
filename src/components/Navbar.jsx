@@ -26,7 +26,7 @@ const Navbar = () => {
               {l.label}
             </NavLink>
           ))}
-          <Link to="/contact" className="btn-gradient">Contact</Link>
+          <NavLink to="/contact" className={({ isActive }) => `btn-gradient ${isActive ? 'nav-cta-active' : ''}`}>Contact</NavLink>
         </nav>
 
         <button className="nav-toggle" onClick={() => setOpen((o) => !o)} aria-label={open ? 'Close menu' : 'Open menu'} aria-expanded={open}>
