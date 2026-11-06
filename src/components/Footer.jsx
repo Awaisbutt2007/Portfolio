@@ -1,3 +1,4 @@
+import { Link } from 'react-router-dom';
 import React from 'react';
 import { Code2 as GithubIcon, User as LinkedinIcon, Mail, FileText } from 'lucide-react';
 import FadeIn from './FadeIn';
@@ -56,11 +57,11 @@ const Footer = () => {
           <div style={{ paddingLeft: '1rem' }}>
             <h3 style={{ fontSize: '1.25rem', fontWeight: '600', marginBottom: '1.5rem', color: '#fff' }}>Quick Links</h3>
             <div style={{ display: 'flex', flexDirection: 'column', gap: '1rem' }}>
-              <a href="/#home" style={{ color: 'var(--text-secondary)', textDecoration: 'none', transition: 'color 0.2s', fontWeight: '500' }} onMouseOver={(e) => e.target.style.color = '#fff'} onMouseOut={(e) => e.target.style.color = 'var(--text-secondary)'}>Home</a>
-              <a href="/#about" style={{ color: 'var(--text-secondary)', textDecoration: 'none', transition: 'color 0.2s', fontWeight: '500' }} onMouseOver={(e) => e.target.style.color = '#fff'} onMouseOut={(e) => e.target.style.color = 'var(--text-secondary)'}>About Journey</a>
-              <a href="/#services" style={{ color: 'var(--text-secondary)', textDecoration: 'none', transition: 'color 0.2s', fontWeight: '500' }} onMouseOver={(e) => e.target.style.color = '#fff'} onMouseOut={(e) => e.target.style.color = 'var(--text-secondary)'}>My Services</a>
-              <a href="/#skills" style={{ color: 'var(--text-secondary)', textDecoration: 'none', transition: 'color 0.2s', fontWeight: '500' }} onMouseOver={(e) => e.target.style.color = '#fff'} onMouseOut={(e) => e.target.style.color = 'var(--text-secondary)'}>Technical Skills</a>
-              <a href="/#projects" style={{ color: 'var(--text-secondary)', textDecoration: 'none', transition: 'color 0.2s', fontWeight: '500' }} onMouseOver={(e) => e.target.style.color = '#fff'} onMouseOut={(e) => e.target.style.color = 'var(--text-secondary)'}>Featured Projects</a>
+              <Link to="/" className="footer-link">Home</Link>
+              <Link to="/about" className="footer-link">About Me</Link>
+              <Link to="/services" className="footer-link">Services</Link>
+              <Link to="/projects" className="footer-link">All Projects</Link>
+              <Link to="/contact" className="footer-link">Contact</Link>
             </div>
           </div>
 

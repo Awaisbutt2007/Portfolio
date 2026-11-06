@@ -142,10 +142,33 @@ const shapeAt = (p) => {
   return 3;
 };
 const ease = (t) => (t < 0.5 ? 4 * t * t * t : 1 - Math.pow(-2 * t + 2, 3) / 2);
-const COLORS = ['#10b981', '#3b82f6', '#8b5cf6', '#22d3ee'];
+// Soft, warm-white core with a tinted halo: reads as light, not as pixels
+const PALETTE = [
+  [255, 255, 255],
+  [167, 243, 208], // mint
+  [125, 211, 252], // sky
+  [196, 181, 253], // lavender
+  [110, 231, 183], // emerald
+  [147, 197, 253], // blue
+];
+
+const makeSprite = ([r, g, b]) => {
+  const s = 64;
+  const c = document.createElement('canvas');
+  c.width = c.height = s;
+  const x = c.getContext('2d');
+  const grd = x.createRadialGradient(s / 2, s / 2, 0, s / 2, s / 2, s / 2);
+  grd.addColorStop(0, 'rgba(255,255,255,1)');
+  grd.addColorStop(0.12, `rgba(${r},${g},${b},0.95)`);
+  grd.addColorStop(0.35, `rgba(${r},${g},${b},0.28)`);
+  grd.addColorStop(1, `rgba(${r},${g},${b},0)`);
+  x.fillStyle = grd;
+  x.fillRect(0, 0, s, s);
+  return c;
+};
 
 /* ------------------------------------------------------------------ */
-/*  Canvas: a scroll-scrubbed "video" rendered in real time            */
+/*  Canvas: a scroll-scrubbed "film" rendered in real time             */
 /* ------------------------------------------------------------------ */
 const ParticleFilm = ({ progress }) => {
   const canvasRef = useRef(null);
@@ -154,13 +177,36 @@ const ParticleFilm = ({ progress }) => {
     const canvas = canvasRef.current;
     const ctx = canvas.getContext('2d');
     const isSmall = window.innerWidth < 768;
-    const N = isSmall ? 900 : 1700;
+    const N = isSmall ? 1300 : 2600;
+    const DUST = isSmall ? 120 : 260;
     const shapes = buildShapes(N);
-    const jitter = Array.from({ length: N }, () => [
-      (Math.random() - 0.5) * 2,
-      (Math.random() - 0.5) * 2,
-      (Math.random() - 0.5) * 2,
-    ]);
+    const sprites = PALETTE.map(makeSprite);
+
+    // per-particle constants
+    const jitter = Array.from({ length: N }, () => {
+      // random direction on a sphere for a soft, round burst
+      const u = Math.random() * 2 - 1;
+      const th = Math.random() * Math.PI * 2;
+      const r = Math.sqrt(1 - u * u) * (0.4 + Math.random() * 0.6);
+      return [Math.cos(th) * r, u * (0.4 + Math.random() * 0.6), Math.sin(th) * r];
+    });
+    const tint = Uint8Array.from({ length: N }, () => {
+      const r = Math.random();
+      return r < 0.35 ? 0 : 1 + Math.floor(Math.random() * (PALETTE.length - 1));
+    });
+    const sizeK = Float32Array.from({ length: N }, () => 0.55 + Math.pow(Math.random(), 3) * 1.6);
+    const phase = Float32Array.from({ length: N }, () => Math.random() * Math.PI * 2);
+    const delay = Float32Array.from({ length: N }, () => Math.random() * 0.35); // staggered arrival
+
+    // background dust for depth (slow parallax)
+    const dust = Array.from({ length: DUST }, () => ({
+      x: Math.random(),
+      y: Math.random(),
+      z: 0.2 + Math.random() * 0.8,
+      t: Math.floor(Math.random() * PALETTE.length),
+      p: Math.random() * Math.PI * 2,
+    }));
+
     const px = new Float32Array(N);
     const py = new Float32Array(N);
     let w = 0;
@@ -181,8 +227,8 @@ const ParticleFilm = ({ progress }) => {
     };
     resize();
     for (let i = 0; i < N; i++) {
-      px[i] = w / 2;
-      py[i] = h / 2;
+      px[i] = Math.random() * w;
+      py[i] = Math.random() * h;
     }
 
     const onMove = (e) => {
@@ -194,24 +240,19 @@ const ParticleFilm = ({ progress }) => {
       mouse.x = mouse.y = -9999;
     };
 
+    const clamp01 = (v) => (v < 0 ? 0 : v > 1 ? 1 : v);
+
     const frame = (time) => {
       if (!running) return;
       const t = time / 1000;
-      smooth += (progress.get() - smooth) * 0.09;
+      smooth += (progress.get() - smooth) * 0.1;
 
       const s = shapeAt(smooth);
       const from = Math.min(Math.floor(s), 2);
-      const k = ease(Math.min(Math.max(s - from, 0), 1));
-      const burst = Math.sin(Math.PI * k) * 0.45; // particles scatter mid-morph
+      const raw = clamp01(s - from);
       const A = shapes[from];
       const B = shapes[from + 1];
 
-      const globeW = Math.max(0, s - 2);
-      const rot = Math.sin(t * 0.5) * 0.18 * (1 - globeW) + (t * 0.35 + smooth * 3) * globeW;
-      const cos = Math.cos(rot);
-      const sin = Math.sin(rot);
-      // after the intro, shapes move aside so the captions stay readable:
-      // right half on desktop, upper half on mobile
       const m = Math.min(1, s);
       const wide = w > 900;
       const fullScale = Math.min(w * 0.42, h * 0.62);
@@ -220,47 +261,88 @@ const ParticleFilm = ({ progress }) => {
       const cx = wide ? w * (0.5 + 0.2 * m) : w / 2;
       const cy = wide ? h * 0.52 : h * (0.5 - 0.2 * m);
 
+      const globeW = Math.max(0, s - 2);
+      const rot = Math.sin(t * 0.45) * 0.22 * (1 - globeW) + (t * 0.3 + smooth * 3) * globeW;
+      const tilt = 0.25 * globeW;
+      const cosR = Math.cos(rot);
+      const sinR = Math.sin(rot);
+      const cosT = Math.cos(tilt);
+      const sinT = Math.sin(tilt);
+
       ctx.clearRect(0, 0, w, h);
       ctx.globalCompositeOperation = 'lighter';
 
+      // dust layer
+      const drift = smooth * 0.25;
+      for (const d of dust) {
+        const x = ((d.x + t * 0.004 * d.z) % 1) * w;
+        const y = (((d.y - drift * d.z) % 1) + 1) % 1 * h;
+        const tw = 0.5 + 0.5 * Math.sin(t * 1.5 + d.p);
+        const sz = 2 + d.z * 4;
+        ctx.globalAlpha = 0.12 + 0.25 * tw * d.z;
+        ctx.drawImage(sprites[d.t], x - sz / 2, y - sz / 2, sz, sz);
+      }
+
       for (let i = 0; i < N; i++) {
+        // staggered, eased progress per particle so the shape "assembles"
+        const k = ease(clamp01((raw - delay[i]) / 0.65));
+        const swirl = Math.sin(Math.PI * k);
         const a = A[i];
         const b = B[i];
         const j = jitter[i];
-        let x = a[0] + (b[0] - a[0]) * k + j[0] * burst;
-        let y = a[1] + (b[1] - a[1]) * k + j[1] * burst;
-        let z = a[2] + (b[2] - a[2]) * k + j[2] * burst;
 
-        // gentle idle float
-        x += Math.sin(t * 0.8 + i) * 0.006;
-        y += Math.cos(t * 0.7 + i * 1.3) * 0.006;
+        let x = a[0] + (b[0] - a[0]) * k;
+        let y = a[1] + (b[1] - a[1]) * k;
+        let z = a[2] + (b[2] - a[2]) * k;
 
-        const rx = x * cos - z * sin;
-        const rz = x * sin + z * cos;
-        const f = 2.4 / (2.4 + rz);
+        // mid-morph: particles bloom outward and swirl around the centre
+        const ang = swirl * 1.2;
+        const ca = Math.cos(ang);
+        const sa = Math.sin(ang);
+        const bx = x * ca - z * sa;
+        const bz = x * sa + z * ca;
+        x = bx + j[0] * swirl * 0.35;
+        y = y + j[1] * swirl * 0.35;
+        z = bz + j[2] * swirl * 0.35;
+
+        // idle breathing
+        const ph = phase[i];
+        x += Math.sin(t * 0.7 + ph) * 0.004;
+        y += Math.cos(t * 0.6 + ph * 1.3) * 0.004;
+
+        // rotate (Y) + tilt (X)
+        const rx = x * cosR - z * sinR;
+        let rz = x * sinR + z * cosR;
+        const ry = y * cosT - rz * sinT;
+        rz = y * sinT + rz * cosT;
+        const f = 2.6 / (2.6 + rz);
 
         let tx = cx + rx * scale * f;
-        let ty = cy + y * scale * f;
+        let ty = cy + ry * scale * f;
 
-        // cursor repulsion
+        // cursor: soft push
         const dx = tx - mouse.x;
         const dy = ty - mouse.y;
         const d2 = dx * dx + dy * dy;
-        if (d2 < 12000) {
-          const push = (1 - d2 / 12000) * 38;
+        if (d2 < 14000) {
+          const push = (1 - d2 / 14000) * 42;
           const d = Math.sqrt(d2) || 1;
           tx += (dx / d) * push;
           ty += (dy / d) * push;
         }
 
-        px[i] += (tx - px[i]) * 0.18;
-        py[i] += (ty - py[i]) * 0.18;
+        px[i] += (tx - px[i]) * 0.14;
+        py[i] += (ty - py[i]) * 0.14;
 
-        const size = Math.max(0.6, 1.7 * f);
-        ctx.globalAlpha = Math.min(1, 0.35 + 0.6 * f * (from === 0 && k < 0.5 ? 0.6 : 1));
-        ctx.fillStyle = COLORS[i % 4];
-        ctx.fillRect(px[i], py[i], size, size);
+        // depth: near = bigger & brighter, far = small & faint
+        const depth = clamp01((f - 0.7) / 0.7);
+        const twinkle = 0.75 + 0.25 * Math.sin(t * 2.2 + ph * 3);
+        const stage0 = from === 0 ? 1 - raw * 0.6 : 0; // star-field is dimmer
+        const size = (3.2 + depth * 5.5) * sizeK[i] * (1 - stage0 * 0.35);
+        ctx.globalAlpha = clamp01((0.22 + depth * 0.7) * twinkle * (1 - stage0 * 0.45));
+        ctx.drawImage(sprites[tint[i]], px[i] - size / 2, py[i] - size / 2, size, size);
       }
+
       ctx.globalAlpha = 1;
       ctx.globalCompositeOperation = 'source-over';
       raf = requestAnimationFrame(frame);

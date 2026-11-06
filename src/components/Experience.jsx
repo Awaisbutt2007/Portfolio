@@ -42,7 +42,7 @@ const Experience = () => {
         <FadeIn>
         <div style={{ marginBottom: '4rem' }}>
           <h2 style={{ fontSize: '2.5rem', marginBottom: '1rem', color: '#fff' }}>
-            My Journey
+            Timeline
           </h2>
           <p style={{ color: 'var(--text-secondary)', fontSize: '1.125rem', maxWidth: '600px' }}>
             A timeline of my professional and educational milestones.

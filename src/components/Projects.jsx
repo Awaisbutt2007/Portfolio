@@ -14,8 +14,10 @@ import {
   BookOpen,
   Globe,
   Play,
+  ArrowUpRight,
 } from 'lucide-react';
 import FadeIn from './FadeIn';
+import { Link } from 'react-router-dom';
 import { projects, categories } from '../data/projects';
 
 const ICONS = {
@@ -89,7 +91,7 @@ const FeaturedCard = ({ project, index }) => {
 
         <div className="pfeatured-body">
           <span className="pcat">{CATEGORY_LABEL[project.category]}</span>
-          <h3>{project.title}</h3>
+          <h3><Link to={`/projects/${project.id}`} className="ptitle-link">{project.title}</Link></h3>
           <p className="ptagline">{project.tagline}</p>
           <Tech tech={project.tech} />
           <p className="pdesc">{project.description}</p>
@@ -105,8 +107,11 @@ const FeaturedCard = ({ project, index }) => {
                 <GithubIcon size={16} style={{ marginRight: '0.4rem' }} /> GitHub
               </a>
             )}
+            <Link to={`/projects/${project.id}`} className="btn-secondary">
+              Full case study <ArrowUpRight size={16} style={{ marginLeft: '0.3rem' }} />
+            </Link>
             <button className="ptoggle" onClick={() => setOpen((o) => !o)} aria-expanded={open}>
-              {open ? 'Show less' : 'Case study'}
+              {open ? 'Show less' : 'Quick look'}
               <motion.span animate={{ rotate: open ? 180 : 0 }} style={{ display: 'inline-flex' }}>
                 <ChevronDown size={18} />
               </motion.span>
@@ -177,7 +182,7 @@ const CompactCard = ({ project }) => {
         <Media project={project} compact />
         <div className="pcompact-body">
           <span className="pcat">{CATEGORY_LABEL[project.category]}</span>
-          <h3>{project.title}</h3>
+          <h3><Link to={`/projects/${project.id}`} className="ptitle-link stretched">{project.title}</Link></h3>
           <p>{project.tagline}</p>
           <Tech tech={project.tech} />
           {project.liveLink && (
@@ -191,7 +196,7 @@ const CompactCard = ({ project }) => {
   );
 };
 
-const Projects = () => {
+const Projects = ({ hideHeading = false }) => {
   const [filter, setFilter] = useState('all');
 
   const visible = projects.filter((p) => filter === 'all' || p.category === filter);
@@ -200,16 +205,16 @@ const Projects = () => {
   const count = (id) => (id === 'all' ? projects.length : projects.filter((p) => p.category === id).length);
 
   return (
-    <section className="section" id="projects" style={{ paddingTop: '6rem' }}>
+    <section className="section" id="projects" style={{ paddingTop: hideHeading ? '2rem' : '6rem' }}>
       <div className="container" style={{ maxWidth: '1200px' }}>
-        <FadeIn>
+        {!hideHeading && <FadeIn>
           <div style={{ marginBottom: '3rem', textAlign: 'center' }}>
             <h2 className="section-title">Things I’ve Built</h2>
             <p className="section-sub" style={{ margin: '0 auto' }}>
               SaaS platforms, offline desktop software used by real businesses, and 3D animated websites, built end to end.
             </p>
           </div>
-        </FadeIn>
+        </FadeIn>}
 
         <div className="pfilters" role="tablist">
           {categories.map((c) => (

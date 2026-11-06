@@ -11,6 +11,7 @@ export const projects = [
   // ─────────────── SaaS & Platforms ───────────────
   {
     id: 'bookkaro',
+    image: '/projects/bookkaro.jpg',
     liveLink: 'https://bookkro.vercel.app',
     category: 'platform',
     featured: true,
@@ -164,6 +165,7 @@ export const projects = [
   },
   {
     id: 'sunehri-khata',
+    image: '/projects/sunehri-khata.jpg',
     liveLink: 'https://sunehri-khata.vercel.app',
     category: 'desktop',
     title: 'Sunehri Khata',
@@ -270,6 +272,7 @@ export const projects = [
   },
   {
     id: 'kinetiq',
+    image: '/projects/kinetiq.jpg',
     liveLink: 'https://kinetiq-three-flame.vercel.app',
     category: 'website',
     title: 'KINETIQ Teamwear',
