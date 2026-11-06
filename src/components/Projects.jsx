@@ -180,6 +180,11 @@ const CompactCard = ({ project }) => {
           <h3>{project.title}</h3>
           <p>{project.tagline}</p>
           <Tech tech={project.tech} />
+          {project.liveLink && (
+            <a href={project.liveLink} target="_blank" rel="noreferrer" className="plive">
+              <ExternalLink size={14} /> Visit live site
+            </a>
+          )}
         </div>
       </div>
     </motion.article>

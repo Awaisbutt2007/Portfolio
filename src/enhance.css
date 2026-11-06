@@ -185,6 +185,11 @@
 .pcompact .pmedia { border-radius: 0; border: none; border-bottom: 1px solid var(--border-color); }
 .pcompact-body { padding: 1.25rem 1.25rem 1.5rem; }
 .pcompact-body h3 { color: #fff; font-size: 1.25rem; margin: 0.3rem 0; }
+.plive {
+  display: inline-flex; align-items: center; gap: 0.35rem; margin-top: 1rem;
+  font-size: 0.85rem; font-weight: 600; color: var(--a, #10b981); text-decoration: none;
+}
+.plive:hover { text-decoration: underline; }
 .pcompact-body p { color: var(--text-secondary); font-size: 0.92rem; line-height: 1.6; margin-bottom: 0.9rem; }
 
 @media (max-width: 860px) {

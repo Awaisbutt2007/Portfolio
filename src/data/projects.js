@@ -11,6 +11,7 @@ export const projects = [
   // ─────────────── SaaS & Platforms ───────────────
   {
     id: 'bookkaro',
+    liveLink: 'https://bookkro.vercel.app',
     category: 'platform',
     featured: true,
     title: 'BookKaro',
@@ -163,6 +164,7 @@ export const projects = [
   },
   {
     id: 'sunehri-khata',
+    liveLink: 'https://sunehri-khata.vercel.app',
     category: 'desktop',
     title: 'Sunehri Khata',
     tagline: 'Digital udhaar khata for shopkeepers',
@@ -229,6 +231,7 @@ export const projects = [
   },
   {
     id: 'gridforge',
+    liveLink: 'https://gridforge-eta.vercel.app',
     category: 'website',
     title: 'GRIDFORGE',
     tagline: 'Football kit store with a live jersey customiser',
@@ -247,6 +250,7 @@ export const projects = [
   },
   {
     id: 'ironpulse',
+    liveLink: 'https://4-five-pied.vercel.app',
     category: 'website',
     title: 'IRONPULSE',
     tagline: 'Gym site with a 240-frame scroll-scrubbed video hero',
@@ -256,6 +260,7 @@ export const projects = [
   },
   {
     id: 'ironforge',
+    liveLink: 'https://gym-smoky-phi.vercel.app',
     category: 'website',
     title: 'IRONFORGE Gym',
     tagline: 'Strength & coaching gym: story-driven scroll site',
@@ -265,6 +270,7 @@ export const projects = [
   },
   {
     id: 'kinetiq',
+    liveLink: 'https://kinetiq-three-flame.vercel.app',
     category: 'website',
     title: 'KINETIQ Teamwear',
     tagline: 'Custom teamwear brand with product reels',
