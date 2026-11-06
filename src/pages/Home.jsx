@@ -18,6 +18,7 @@ function Home() {
             <a href="/#about" style={{ color: 'var(--text-secondary)', textDecoration: 'none', fontSize: '0.875rem', fontWeight: '500' }}>About</a>
             <a href="/#services" style={{ color: 'var(--text-secondary)', textDecoration: 'none', fontSize: '0.875rem', fontWeight: '500' }}>Services</a>
             <a href="/#skills" style={{ color: 'var(--text-secondary)', textDecoration: 'none', fontSize: '0.875rem', fontWeight: '500' }}>Skills</a>
+            <a href="/#experience" style={{ color: 'var(--text-secondary)', textDecoration: 'none', fontSize: '0.875rem', fontWeight: '500' }}>Journey</a>
             <a href="/#projects" style={{ color: 'var(--text-secondary)', textDecoration: 'none', fontSize: '0.875rem', fontWeight: '500' }}>Projects</a>
             <Link to="/contact" className="btn-gradient">Contact</Link>
           </nav>

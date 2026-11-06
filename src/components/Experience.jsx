@@ -6,9 +6,15 @@ const Experience = () => {
   const experiences = [
     {
       year: '2026 - Present',
-      role: 'Frontend Development Mastery',
-      company: 'Self-Taught & Practical Projects',
-      description: 'Dedicated 2 intensive years to mastering web development. Acquired deep expertise in HTML, CSS, JavaScript, React, Tailwind CSS, Bootstrap, and QA Testing. Built numerous practical projects to solidify these skills.'
+      role: 'Freelance Software Developer',
+      company: 'Business Software, SaaS & Websites',
+      description: 'Building complete products: desktop software for clinics, restaurants, mobile shops and retailers (Smart Clinic, Restaurant Manager, Mobile Shop Manager, Sunehri Khata), SaaS platforms like BookKaro and PostEverywhere, and 3D animated brand websites for sportswear, surgical and fitness businesses.'
+    },
+    {
+      year: 'Foundations',
+      role: 'Web Development, Self-Taught',
+      company: 'Practical Projects',
+      description: 'Dedicated 2 intensive years to mastering web development: HTML, CSS, JavaScript, React, Tailwind CSS, backend fundamentals, REST APIs, Postman and QA testing, then moved on to Next.js, Supabase, Electron and Three.js.'
     },
     {
       year: '2024',

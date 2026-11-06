@@ -19,17 +19,17 @@ const About = () => {
               {/* Text Side */}
               <div>
                 <h3 style={{ fontSize: '1.75rem', marginBottom: '1.5rem', color: '#fff' }}>
-                  Passionate Frontend Developer
+                  Full-Stack Developer: Web, Desktop & SaaS
                 </h3>
                 <p style={{ color: 'var(--text-secondary)', marginBottom: '1rem', lineHeight: '1.8', fontSize: '1.125rem' }}>
-                  I'm Awais, a self-taught software engineer with a deep passion for crafting beautiful, functional, and responsive user interfaces. My journey into tech has been driven by pure curiosity and a relentless desire to build things that live on the internet.
+                  I'm Awais, a self-taught software engineer with a deep passion for crafting beautiful, functional, and responsive web applications. My journey into tech has been driven by pure curiosity and a relentless desire to build things that live on the internet.
                 </p>
                 <p style={{ color: 'var(--text-secondary)', marginBottom: '2rem', lineHeight: '1.8', fontSize: '1.125rem' }}>
-                  Despite starting with a basic educational background (Matric pass), my dedication to self-learning has allowed me to master modern web technologies and turn complex problems into elegant solutions.
+                  Despite starting with a basic educational background (Matric pass), my dedication to self-learning has taken me from HTML and CSS to shipping full products: SaaS platforms on Next.js and Supabase, offline Electron desktop software used by clinics, restaurants and shops, and 3D animated websites with Three.js and GSAP.
                 </p>
                 
                 <div style={{ display: 'flex', flexDirection: 'column', gap: '1rem' }}>
-                  {['Fast Learner & Adaptable', 'Creative Problem Solver', 'Detail & Design Oriented'].map((trait, i) => (
+                  {['Ships complete products, end to end', 'Builds for real Pakistani businesses (Urdu, PKR, WhatsApp)', 'Fast learner & creative problem solver', 'Detail & design oriented'].map((trait, i) => (
                     <div key={i} style={{ display: 'flex', alignItems: 'center', gap: '0.75rem' }}>
                       <CheckCircle2 size={20} style={{ color: '#10b981' }} />
                       <span style={{ color: '#fff', fontWeight: '500', fontSize: '1rem' }}>{trait}</span>
@@ -93,10 +93,9 @@ const About = () => {
                 <div style={{ position: 'absolute', top: 0, left: 0, width: '4px', height: '100%', background: 'linear-gradient(to bottom, #3b82f6, #8b5cf6)' }}></div>
                 <Briefcase size={32} style={{ color: '#3b82f6', marginBottom: '1.25rem' }} />
                 <div style={{ fontSize: '0.875rem', color: '#3b82f6', fontWeight: '600', marginBottom: '0.5rem', textTransform: 'uppercase', letterSpacing: '0.05em' }}>Experience</div>
-                <h3 style={{ fontSize: '1.5rem', marginBottom: '1rem', color: '#fff' }}>Frontend Development</h3>
+                <h3 style={{ fontSize: '1.5rem', marginBottom: '1rem', color: '#fff' }}>Products, Not Just Pages</h3>
                 <p style={{ color: 'var(--text-secondary)', lineHeight: '1.7', fontSize: '1rem' }}>
-                  Focused on modern frontend technologies, building responsive and accessible user interfaces. I continuously learn and adapt to new frameworks to deliver high-quality web applications.
-                </p>
+                  From booking SaaS and social media automation to Windows desktop software with licensing, backups and role-based access, I build the whole thing: database, API, UI, installer and tests. </p>
               </div>
 
             </div>
@@ -109,7 +108,7 @@ const About = () => {
             <Code2 size={48} style={{ color: 'var(--text-primary)', margin: '0 auto 1.5rem auto' }} />
             <h3 style={{ fontSize: '2rem', marginBottom: '1.5rem', color: '#fff' }}>My Philosophy</h3>
             <p style={{ color: 'var(--text-secondary)', lineHeight: '1.8', fontSize: '1.25rem', maxWidth: '800px', margin: '0 auto', fontStyle: 'italic' }}>
-              "I believe in writing clean, maintainable code. A great user experience stems from robust architecture, thoughtful design, and meticulous attention to detail on the frontend. Every project is an opportunity to learn and push boundaries."
+              "I believe in writing clean, maintainable code. A great user experience stems from thoughtful design, reliable APIs, and meticulous attention to detail across the frontend and backend. Every project is an opportunity to learn and push boundaries."
             </p>
           </div>
         </FadeIn>
